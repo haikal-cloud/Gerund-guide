@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Gerunds</title>
+    
+    <!-- Chosen Palette: Calm & harmonious -->
+    <!-- Application Structure Plan: A top-to-bottom single-page narrative. Starts with a hero definition. Followed by an interactive tabbed section for the 4 main uses of gerunds, allowing focused learning. A bar chart then visualizes common verbs that take gerunds to provide a memorable, quantitative-style insight. A side-by-side comparison section clarifies the tricky Gerund vs. Participle concept. A sidebar on the right is added for the author's profile. The flow is designed to build knowledge progressively, from definition to application and clarification, ideal for a learning topic. -->
+    <!-- Visualization & Content Choices: 1. Main Functions (Organize/Inform) -> Interactive Tabs (HTML/CSS/JS) to let users explore each function without being overwhelmed. 2. Common Verbs (Compare) -> Horizontal Bar Chart (Chart.js/Canvas) to visually rank common verbs followed by gerunds, making the list more digestible and memorable than plain text. 3. Gerund vs. Participle (Compare) -> Two-column card layout (HTML/CSS) for a direct, clear comparison of the two concepts. Author sidebar (HTML/CSS) for contextual information. These choices prioritize interactivity and visual clarity to enhance learning. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+            color: #374151;
+        }
+        .font-serif {
+            font-family: 'Lora', serif;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .tab-button.active {
+            background-color: #3B82F6;
+            color: white;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 450px;
+            width: 100%;
+            max-width: 800px;
+        }
+        .author-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #3B82F6;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="text-center py-12 md:py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <h1 class="font-serif text-4xl md:text-6xl font-bold text-blue-600">The World of Gerunds</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">An interactive guide to understanding the verbs that act like nouns.</p>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content Area -->
+        <main class="lg:col-span-2">
+
+            <section id="definition" class="mb-16">
+                <div class="card max-w-4xl mx-auto lg:mx-0 text-center lg:text-left">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 font-serif">What is a Gerund?</h2>
+                    <p class="text-lg text-gray-600 mb-4">A gerund is a special verb form that always ends in <code class="bg-blue-100 text-blue-700 font-bold rounded px-2 py-1">-ing</code> and, most importantly, functions as a <strong class="text-blue-600">noun</strong> in a sentence. It names an activity or a state of being.</p>
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <p class="text-md text-gray-700">Think of it this way: It <strong class="text-emerald-600">looks like a verb</strong>, but it <strong class="text-blue-600">acts like a noun</strong>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="functions" class="mb-16">
+                <h2 class="text-3xl font-bold text-center mb-8 font-serif">The Four Core Functions</h2>
+                <div class="card max-w-4xl mx-auto lg:mx-0">
+                    <p class="text-center text-gray-600 mb-6">A gerund can play several roles in a sentence. Click the tabs below to explore each function with examples.</p>
+                    <div id="tabs-container" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6">
+                        <button data-tab="subject" class="tab-button text-sm md:text-base font-semibold py-2 px-4 rounded-full bg-gray-200 text-gray-700 active">As a Subject</button>
+                        <button data-tab="verb-object" class="tab-button text-sm md:text-base font-semibold py-2 px-4 rounded-full bg-gray-200 text-gray-700">As Object of Verb</button>
+                        <button data-tab="prep-object" class="tab-button text-sm md:text-base font-semibold py-2 px-4 rounded-full bg-gray-200 text-gray-700">As Object of Preposition</button>
+                        <button data-tab="expressions" class="tab-button text-sm md:text-base font-semibold py-2 px-4 rounded-full bg-gray-200 text-gray-700">After Expressions</button>
+                    </div>
+                    
+                    <div id="tab-contents" class="mt-4 p-4 bg-gray-50 rounded-lg min-h-[200px]">
+                        <div id="subject-content" class="tab-content active">
+                            <h3 class="font-bold text-xl text-gray-800 mb-2">As the Subject of a Sentence</h3>
+                            <p class="text-gray-600 mb-4">The gerund is the main idea the sentence is about.</p>
+                            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li><code class="bg-blue-100 rounded px-1">Running</code> is my favorite hobby.</li>
+                                <li><code class="bg-blue-100 rounded px-1">Learning</code> a new language can be challenging.</li>
+                            </ul>
+                        </div>
+                        <div id="verb-object-content" class="tab-content">
+                            <h3 class="font-bold text-xl text-gray-800 mb-2">As the Object of a Verb</h3>
+                            <p class="text-gray-600 mb-4">Many common verbs are directly followed by a gerund.</p>
+                             <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li>I enjoy <code class="bg-blue-100 rounded px-1">swimming</code> in the ocean.</li>
+                                <li>She suggested <code class="bg-blue-100 rounded px-1">going</code> to the cinema.</li>
+                            </ul>
+                        </div>
+                        <div id="prep-object-content" class="tab-content">
+                            <h3 class="font-bold text-xl text-gray-800 mb-2">As the Object of a Preposition</h3>
+                            <p class="text-gray-600 mb-4">If a verb follows a preposition (like *at, for, about*), it must be a gerund.</p>
+                             <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li>I'm good at <code class="bg-blue-100 rounded px-1">playing</code> chess.</li>
+                                <li>Thanks for <code class="bg-blue-100 rounded px-1">helping</code> me.</li>
+                            </ul>
+                        </div>
+                        <div id="expressions-content" class="tab-content">
+                            <h3 class="font-bold text-xl text-gray-800 mb-2">After Certain Expressions</h3>
+                            <p class="text-gray-600 mb-4">Some fixed phrases in English are always followed by a gerund.</p>
+                             <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                <li>It's no use <code class="bg-blue-100 rounded px-1">waiting</code> in long queues.</li>
+                                <li>It's no use <code class="bg-blue-100 rounded px-1">crying</code> over spilled milk.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="visualization" class="mb-16">
+                 <h2 class="text-3xl font-bold text-center mb-2 font-serif">Common Verbs That Take Gerunds</h2>
+                 <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">While many verbs can be followed by a gerund, some are far more common in everyday English. This chart highlights verbs you should learn first.</p>
+                <div class="card">
+                    <div class="chart-container">
+                        <canvas id="gerundVerbsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="comparison" class="mb-16">
+                <h2 class="text-3xl font-bold text-center mb-8 font-serif">Gerund vs. Present Participle</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">This is a common point of confusion. Both end in -ing, but their jobs in a sentence are completely different. Here's a clear comparison.</p>
+                <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto lg:mx-0">
+                    <div class="card border-t-4 border-blue-500">
+                        <h3 class="text-2xl font-bold text-blue-600 mb-4">Gerund (Acts as a NOUN)</h3>
+                        <p class="mb-4 text-gray-600">It names an activity.</p>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong class="text-blue-600">Running</strong> is good exercise.</li>
+                            <li class="italic">Here, "Running" is the 'thing' that is good for you.</li>
+                        </ul>
+                    </div>
+                    <div class="card border-t-4 border-emerald-500">
+                        <h3 class="text-2xl font-bold text-emerald-600 mb-4">Present Participle (Acts as an ADJECTIVE or VERB)</h3>
+                        <p class="mb-4 text-gray-600">It describes a noun or is part of a continuous verb tense.</p>
+                         <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li>The <strong class="text-emerald-600">running</strong> water was cold.</li>
+                            <li class="italic">Here, "running" describes the water.</li>
+                            <li>He <strong class="text-emerald-600">is running</strong> a marathon.</li>
+                             <li class="italic">Here, "is running" is the action he is doing right now.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <!-- Right Sidebar for Author Photo -->
+        <aside class="lg:col-span-1">
+            <div class="card sticky top-8 p-6 text-center">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 font-serif">About the Author</h3>
+                <!-- Replace this URL with a DIRECT LINK to your photo (ending in .jpg/.png) -->
+                <!-- Ensure your photo is uploaded to a public image hosting service like Imgur, Postimages, etc. -->
+                <img src="https://i.postimg.cc/k4J5HJLW/growth-4.png" 
+                     alt="Author Photo" 
+                     class="author-photo mx-auto mb-4">
+                <p class="text-gray-600 text-md">
+                    Hello! I'm Haikal and am passionate about exploring the intersections of technology, education, data, and business. I've just always love spreading knowledges, I hope this helps you master gerunds and enhance your English skills.
+                    <br><br>
+                    For business inquiries or collaborations, feel free to DM me on Instagram: 
+                    <a href="https://www.instagram.com/_fikri.haikall/" target="_blank" class="text-blue-600 hover:underline">@_fikri.haikall</a>
+                </p>
+            </div>
+        </aside>
+
+    </div>
+    
+    <footer class="bg-gray-800 text-white text-center py-6">
+        <h3 class="text-2xl font-bold font-serif mb-2">Master the Gerund!</h3>
+        <p class="max-w-3xl mx-auto px-6">Understanding gerunds is key to sounding more natural and fluent in English. Keep practicing!</p>
+    </footer>
+
+    <script>
+        const tabsContainer = document.getElementById('tabs-container');
+        const tabContents = document.getElementById('tab-contents');
+
+        tabsContainer.addEventListener('click', (event) => {
+            if (event.target.classList.contains('tab-button')) {
+                const targetTab = event.target.dataset.tab;
+
+                tabsContainer.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+
+                tabContents.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${targetTab}-content`).classList.add('active');
+            }
+        });
+
+        const ctx = document.getElementById('gerundVerbsChart').getContext('2d');
+        
+        const chartData = {
+            labels: ['enjoy', 'finish', 'keep', 'suggest', 'avoid', 'practice', 'mind', 'quit', 'consider'],
+            datasets: [{
+                label: 'Commonness Score',
+                data: [95, 90, 88, 85, 82, 75, 70, 65, 60],
+                backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(59, 130, 246, 1)',
+            }]
+        };
+
+        const gerundVerbsChart = new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Relative Commonness (Illustrative)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'How often verbs are followed by gerunds',
+                        font: {
+                            size: 18,
+                            family: "'Lora', serif"
+                        },
+                        padding: {
+                            bottom: 20
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
